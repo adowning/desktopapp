@@ -1,3 +1,4 @@
+/* eslint-disable  */
 /* global Parse */
 import './hooks/init'
 import './functions/timesheet-functions'
@@ -13,11 +14,12 @@ const pubnub = new PubNub({
 
 Parse.Cloud.define('hello', req => `Hi ${req.user ? req.user.getUsername() : 'Unknown'}`)
 
-function timeout(ms: number) {
+function timeout() {
   return new Promise(resolve => setTimeout(resolve, 1000))
 }
 
-async function createAdmin() {
+// eslint-disable-next-line consistent-return
+async function createAdmin(): Promise<Parse.User | undefined> {
   const query = new Parse.Query(Parse.User)
   query.equalTo('username', 'admin') // find all the women
   const admin = await query.first()
@@ -46,25 +48,25 @@ async function createAdmin() {
     }
   } else {
     return admin
-    console.log('admin exists')
   }
 }
 
-async function createAdminTimesheets(admin: Parse.User) {
+async function createAdminTimesheets(admin: Parse.User): Promise<void> {
   const timesheets = []
   const Timesheet = Parse.Object.extend('Timesheet')
   const query = new Parse.Query(Timesheet)
   // query.equalTo('employee', admin)
-  var count = await query.find()
+  const count = await query.find()
 
   if (count.length < 2) {
-    for (var i = 0; i < 31; i++) {
-      var now = new Date()
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < 31; i++) {
+      const now = new Date()
       now.setDate(now.getDate() - i)
-      let stt = now.valueOf()
-      var end = now
+      const stt = now.valueOf()
+      const end = now
       end.setTime(end.getTime() + 6 * 60 * 60 * 1000)
-      let ett = end.valueOf()
+      const ett = end.valueOf()
       // var values = {
       //   startTime: now,
       //   // status: 1,
@@ -77,7 +79,7 @@ async function createAdminTimesheets(admin: Parse.User) {
       //   deviceId: 'debug',
       //   // className: 'Timesheet',
       // }
-      let ts = new Timesheet()
+      const ts = new Timesheet()
       ts.set('startTime', now)
       ts.set('duration', 1)
       ts.set('startTimestamp', stt)
@@ -94,11 +96,12 @@ async function createAdminTimesheets(admin: Parse.User) {
   }
 }
 
-async function wait(fn: Promise<void> | null) {
-  await timeout(3000)
+async function wait(): Promise<void> {
+  await timeout()
   const admin = await createAdmin()
-  return await createAdminTimesheets(admin)
+  // eslint-disable-next-line no-return-await
+  return await createAdminTimesheets(admin as Parse.User)
 }
-if (process.env.NODE_ENV == 'development') {
-  wait(null)
+if (process.env.NODE_ENV === 'development') {
+  wait()
 }
