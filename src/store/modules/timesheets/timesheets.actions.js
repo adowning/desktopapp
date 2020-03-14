@@ -4,10 +4,40 @@ export default {
   /**
    * Fetch timesheets of current loggedin user
    */
-  getUserTimesheets: async ({ rootState, commit }, user) => {
-    //console.log(user)
-    const timesheets = await getTimesheetsByUser(user)
-    commit('addTimesheets', timesheets)
+  getMonthTimesheets: async ({ rootState, commit }) => {
+    console.log(Parse.User.current())
+    const query = new Parse.Query(Parse.User)
+    const usersList = await query.find()
+    if (process.env.VUE_APP_NODE_ENV !== 'development') {
+      const timesheets = await getUserTimesheets()
+      commit('addTimesheets', timesheets)
+    } else {
+      usersList.forEach(user => {
+        // this.generateFakeSheets()
+        const timesheets = []
+        for (var i = 0; i < 31; i++) {
+          var now = new Date()
+          now.setDate(now.getDate() - i)
+          let stt = now.valueOf()
+          var end = now
+          end.setTime(end.getTime() + 6 * 60 * 60 * 1000)
+          let ett = end.valueOf()
+          var timeSheet = {
+            startTime: now,
+            status: 2,
+            duration: 1,
+            startTimestamp: stt,
+            approved: true,
+            endTime: end,
+            endTimestamp: ett,
+            employee: user,
+            deviceId: 'debug',
+          }
+          timesheets.push(timeSheet)
+        }
+        commit('addTimesheets', timesheets)
+      })
+    }
   },
 
   /**

@@ -45,6 +45,8 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { isNil } from 'lodash'
+import { MODULES } from '@/store';
+
 // import firebase from 'firebase/app'
 // import ParseApi from '../api/parseApi'
 export default {
@@ -65,8 +67,8 @@ export default {
   },
   async mounted() {},
   computed: {
-    ...mapState('authentication', ['user']),
-    ...mapState('app', ['networkOnLine', 'appTitle']),
+    // ...mapState('authentication', ['user']),
+    // ...mapState('app', ['networkOnLine', 'appTitle']),
     profile: function() {
       return this.$store.state.User.profile
     },
@@ -77,7 +79,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('authentication', ['setCurrentUser']),
+    // ...mapMutations('authentication', ['setCurrentUser']),
     // showDevice(val) {
     //   //console.log(val)
 
@@ -85,21 +87,36 @@ export default {
     // },
     login: async function(email, password) {
       this.loginError = null
-      this.setCurrentUser(undefined)
+      // this.setCurrentUser(undefined)
+      const vm = this
       try {
         let credentials = {
           name: this.name,
           password: this.password,
         }
-        console.log('creds', credentials)
-        let user = await this.$store.dispatch('authentication/login', credentials)
-        console.log(user)
-        if (user == 404) {
-          this.$emit('showDevice', true)
-        }
+        console.log('crxeds', credentials)
+        // let user = await this.$store.dispatch('authentication/login', credentials)
+        console.log(vm.$store)
+        vm.$store
+          .dispatch('User/login', {
+            email: credentials.name,
+            password: credentials.password,
+          })
+          .catch(err => {
+            this.loginError = err
+            // this.setCurrentUser(null)
+            console.log(err)
+          })
+        // console.log(user)
+        // if (user == 404) {
+        //   this.$emit('showDevice', true)
+        // } else {
+        //   this.$store.dispatch('timesheets/getMonthTimesheets')
+        //   // this.$router.push({path: '/dashboard'})
+        // }
       } catch (err) {
         this.loginError = err
-        this.setCurrentUser(null)
+        // this.setCurrentUser(null)
       }
     },
   },

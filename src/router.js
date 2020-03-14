@@ -9,11 +9,12 @@ import Router from 'vue-router'
 // import Home from '@/views/Home'
 import CheckLogin from '@/views/CheckLogin'
 import { isNil } from 'lodash'
-import store from '@/store'
+// import store from '@/store'
+import store from '@/newstore'
+import { MODULES } from '@/newstore'
 
 Vue.use(Router)
 
-Vue.use(Router)
 export var View
 ;(function(View) {
   View['Dashboard'] = 'dashboard'
@@ -21,7 +22,10 @@ export var View
   View['Login'] = 'login'
   View['List'] = 'list'
   View['Home'] = 'home'
+  View['Employees'] = 'employees'
+  View['CallsView'] = 'calls'
   View['AccountPanel'] = 'accountpanel'
+  View['TimesheetManage'] = 'timesheetManage'
   View['Profile'] = 'profile'
   View['Settings'] = 'settings'
   View['Processes'] = 'processes'
@@ -31,11 +35,11 @@ export const router = new Router({
   mode: 'hash',
   base: '/',
   routes: [
-    {
-      path: '/',
-      name: View.Home,
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/Home.vue'),
-    },
+    // {
+    //   path: '/home',
+    //   name: View.Home,
+    //   component: () => import(/* webpackChunkName: "dashboard" */ './views/Home.vue'),
+    // },
     //  {
     //    path: '/first-time-setup',
     //    name: View.FirstTimeSetup,
@@ -53,6 +57,11 @@ export const router = new Router({
       component: () => import(/* webpackChunkName: "profile" */ './views/Profile.vue'),
     },
     {
+      path: '/employees',
+      name: View.Employees,
+      component: () => import(/* webpackChunkName: "profile" */ './views/Employees.vue'),
+    },
+    {
       path: '/processes',
       name: View.Processes,
       component: () => import(/* webpackChunkName: "processes" */ './views/Processes.vue'),
@@ -68,6 +77,11 @@ export const router = new Router({
       component: () => import(/* webpackChunkName: "timesheetsView" */ './views/TimesheetsView.vue'),
     },
     {
+      path: '/timesheetManage',
+      name: View.TimesheetManage,
+      component: () => import(/* webpackChunkName: "timesheetsView" */ './views/manage/TimesheetManage.vue'),
+    },
+    {
       path: '/calls',
       name: View.CallsView,
       component: () => import(/* webpackChunkName: "callsView" */ './views/CallsView.vue'),
@@ -78,15 +92,18 @@ export const router = new Router({
       component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
     },
     {
+      path: '/error',
+      name: View.Error,
+      component: () => import(/* webpackChunkName: "settings" */ './views/Error.vue'),
+    },
+    {
       path: '/dashboard',
       name: View.Dashboard,
-      beforeEnter: (to, from, next) => {
-        if (store.getters['authentication/isUserLoggedIn']) {
-          next()
-          return
-        }
-        next('/login')
-      },
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+    },
+    {
+      path: '*',
+      name: View.Dashboard,
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
     },
   ],
@@ -106,14 +123,50 @@ routerMethods.forEach(method => {
     return originalCall.call(this, location).catch(err => err)
   }
 })
+
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.loggedIn) {
+  // verify if auth is required
+  // if (to.matched.some(record => record.meta.authRequired)) {
+  console.log(to.name)
+  if (to.name !== 'login') {
+    // route to target if authentication is done
+    if (store.getters[MODULES.User.getters.isAuthenticated]()) {
       next()
-      return
+      // otherwise route to login
+    } else {
+      next({
+        name: 'login',
+      })
     }
-    next('/login')
+    // if no auth is required ...
   } else {
-    next()
+    // redirect to home if authentication is already done
+    if (to.name === 'login' && store.getters[MODULES.User.getters.isAuthenticated]()) {
+      next({
+        name: 'home',
+      })
+      // otherwise move on to routes that do not require authentication
+    } else {
+      next()
+    }
   }
+  // const { requiresAuth = true, requiresAdmin = false } = to.meta
+  // document.body.scrollTop = 0
+  // document.documentElement.scrollTop = 0
+  // console.log(to, requiresAuth, Parse.User.current())
+  // if (requiresAuth && to.path != '/login') {
+  //   if (Parse.User.current() == undefined ) {
+  //     next({
+  //       path: '/login',
+  //       query: { redirect: to.fullPath },
+  //     })
+  //   } else if (requiresAdmin && store.state.accounts.user.tenantType !== 0) {
+  //     console.log('scary')
+  //     next('/forbidden')
+  //   } else {
+  //     next()
+  //   }
+  // } else {
+  //   next()
+  // }
 })

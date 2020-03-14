@@ -1,8 +1,11 @@
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const host = '0.0.0.0'
+const port = 8080
 
 module.exports = {
   // transpileDependencies: ['vuetify'],
+  publicPath: `http://${host}:${port}/`,
   configureWebpack: {
     devtool: 'source-map',
     plugins: [
@@ -16,30 +19,27 @@ module.exports = {
       ]),
     ],
   },
-  // devServer: {
-  // proxy: {
-  // '/': {
-  //   target: 'https://app.ashdevtools.com/',
-  //   ws: true,
-  //   changeOrigin: true,
-  // },
-  // '^/foo': {
-  //   target: '<other_url>',
-  // },
-  // },
-  // },
+  devServer: {
+    // proxy: {
+    // '/': {
+    //   target: 'https://app.ashdevtools.com/',
+    //   ws: true,
+    //   changeOrigin: true,
+    // },
+    // '^/foo': {
+    //   target: '<other_url>',
+    // },
+    // },
+    host: '0.0.0.0',
+    public: '0.0.0.0:8080',
+    disableHostCheck: true,
+  },
   pages: {
     index: {
       entry: 'src/main.js', //entry for the public page
       template: 'public/index.html', // source template
       filename: 'index.html', // output as dist/*
     },
-    maps: {
-      entry: 'src/maps.js',
-      template: 'public/maps.html',
-      filename: 'maps.html',
-    },
-
     notes: {
       entry: 'src/notes/notes.js',
       template: 'public/notes.html',

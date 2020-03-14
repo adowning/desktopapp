@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <!-- <layout-default> -->
+  <div class="CallsView">
     <v-row class=" mt-12 ml-12 ml-5 px-0" width="100%">
       <v-combobox v-model="select" :items="items" label="Filter" dense multiple chips></v-combobox>
     </v-row>
@@ -54,14 +55,22 @@
       </v-container>
     </v-row>
   </div>
+  <!-- </layout-default> -->
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import LayoutDefault from '../layouts/LayoutDefault.vue'
 
 export default {
+  components: {
+    // LayoutDefault,
+  },
   data() {
     return {}
+  },
+  created() {
+    this.$emit(`update:layout`, LayoutDefault)
   },
   computed: {
     ...mapState('callrecords', ['callrecords']),

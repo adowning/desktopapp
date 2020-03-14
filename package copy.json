@@ -1,0 +1,54 @@
+{
+  "name": "sgt-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "devx": "sed 'function beforeLogin(func?: (request: TriggerRequest) => any): void;'/a function afterLogin(func?: (request: TriggerRequest) => any): void;' ./node_modules/@types/parse/index.d.ts && NODE_ENV=development nodemon --inspect src/server.ts",
+    "startx": "yarn build &&  NODE_ENV=production node dist/server.js",
+    "test": "jest",
+    "dev": "concurrently --kill-others \"cd ./server && npm dev\" \"npm run electron:serve\"",
+    "build": "tsc -p ."
+  },
+  "engines": {
+    "node": ">=12.3.1"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^24.9.0",
+    "@types/node": "^13.7.7",
+    "@types/parse": "*",
+    "@types/pubnub": "^4.27.2",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "sucrase": "^3.12.1",
+    "ts-jest": "^24.3.0",
+    "tsconfig-paths": "^3.9.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "expo-server-sdk": "^3.4.0",
+    "express": "^4.17.1",
+    "node-ts": "^5.0.4",
+    "parse": "^2.11.0",
+    "parse-dashboard": "^2.0.5",
+    "parse-server": "4.0.2",
+    "pubnub": "^4.27.3",
+    "typescript": "^3.8.3"
+  },
+  "resolutions": {
+    "parse-dashboard/graphql-playground-react/marked": "^0.7.0",
+    "parse-dashboard/graphql-playground-react/webpack-bundle-analyzer": "^3.3.2"
+  }
+}

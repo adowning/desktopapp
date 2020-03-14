@@ -1,0 +1,79 @@
+steps:
+  - name: node
+    env:
+      - PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
+      - NODE_ENV=production
+      - APP_ID=AndrewsApp
+      - MASTER_KEY=Asdfasdf1234
+      - DATABASE_URI=mongodb+srv://ash:Asdfasdf1234@cluster0-ypimu.- gcp.mongodb.net
+      - DASHBOARD_USERNAME=admin
+      - DASHBOARD_PASSWORD=asdfasdf
+      - PORT=1337
+      - S3_ACCESS_KEY=admin
+      - S3_SECRET_KEY=asdfasdf
+      - S3_BUCKET=public
+      - S3_ENDPOINT=https://s3.ashdevtools.com:9001
+      - REDIS_URL=redis://redis:6379
+      - PUBNUB_SUB=pub-c-fb4a3934-19aa-40cb-9fac-7d27c5f0ea4f
+      - PUBNUB_PUB=sub-c-3ee5140e-7e9c-11e8-a4a6-464114960942
+      - PUBNUB_SECRET=sec-c-ZDkwOTJmYzMtNTg4Ni00MzlhLTg5ODYtNDExY2RmNTVhZjQw
+    # dir: electron
+    entrypoint: yarn
+    args: ['install']
+  # - name: node
+  #   dir: client
+  #   entrypoint: yarn
+  #   args: ['install']
+
+  # - name: node
+  #   dir: client
+  #   entrypoint: yarn
+  #   args: ['run', 'build']
+  - name: node
+    # dir: electron
+    entrypoint: yarn
+    args: ['run', 'build']
+  # - name: node
+  #   dir: electron
+  #   entrypoint: yarn
+  #   args: ['run', 'prepare_client']
+  # - name: 'node'
+  #   args: ['sleep', '80']
+  # - name: node
+  #   dir: electron
+  #   entrypoint: yarn
+  #   args: ['run', 'release']
+# steps:
+# - name: string
+#   args: [string, string, ...]
+#   env: [string, string, ...]
+#   dir: string
+#   id: string
+#   waitFor: string
+#   entrypoint: string
+#   secretEnv: string
+#   volumes: object(Volume)
+#   timeout: string (Duration format)
+# - name: string
+#   ...
+# - name: string
+#   ...
+# timeout: string (Duration format)
+# logsBucket: string
+# options:
+#  env: [string, string, ...]
+#  secretEnv: string
+#  volumes: object(Volume)
+#  sourceProvenanceHash: enum(HashType)
+#  machineType: enum(MachineType)
+#  diskSizeGb: string (int64 format)
+#  substitutionOption: enum(SubstitutionOption)
+#  logStreamingOption: enum(LogStreamingOption)
+#  logging: enum(LoggingMode)
+# substitutions: map (key: string, value: string)
+# tags: [string, string, ...]
+# secrets: object(Secret)
+# images:
+# - [string, string, ...]
+# artifacts: object (Artifacts)
+

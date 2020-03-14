@@ -1,6 +1,6 @@
 import Parse from 'parse'
 // import firebase from 'firebase/auth'
-global.Parse = Parse
+// global.Parse = Parse
 import DollarParse from './DollarParse'
 import { ParseQuery } from '../api/ParseQuery'
 import ParseFunction from '../api/ParseFunction'
@@ -8,6 +8,25 @@ import ParseFunction from '../api/ParseFunction'
 // import { getLoggedInUsers } from '../api/parseApi.js/index.js'
 import ParseApi from '@/api/parseApi'
 //
+class Papi {}
+
+class HandleParseError {
+  constructor(store, router) {
+    this.store = store
+    this.router = router
+  }
+  handleParseError(e) {
+    switch (e) {
+      case Parse.Error.INVALID_SESSION_TOKEN:
+        Parse.User.logOut()
+
+        break
+    }
+  }
+}
+
+var global = window || global
+global.HandleParseError = HandleParseError
 
 const install = async (Vue, options) => {
   if (!options) throw new TypeError('You must provide parse options')
@@ -19,12 +38,19 @@ const install = async (Vue, options) => {
 
   Parse.enableLocalDatastore()
   // initializeApi(options.store)
-  const parseApi = new ParseApi()
-  parseApi.init(options)
-  // parseApi.logoutUser()
+  // const parseApi = new ParseApi()
+  // parseApi.init(options)
+  // // parseApi.logoutUser()
 
-  global.parseApi = parseApi
-  var _user = await parseApi.currentUser()
+  // global.parseApi = parseApi
+  // var _user = await parseApi.currentUser()
+  // try{
+  //   this.currentSession  = await Parse.Session.current()
+  //   }catch(e){
+  const handleParseError = new handleParseError(options.store, options.router)
+  global.handleParseError = options.onerror
+
+  //  },
   if (_user != null) {
     // parseApi.hydrateAll(user)
     var user = _user.toJSON()

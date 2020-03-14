@@ -1,6 +1,10 @@
 import { router } from '@/router'
 import { isNil } from 'lodash'
 import { ipcRenderer } from 'electron'
+import Parse from 'parse'
+import {store } from '../../../store'
+import ParseApi from '@/api/parseApi'
+
 // import { logout } from '@/api/parseApi'
 // import { createNewUserFromFirebaseAuthUser } from '@/util/helpers'
 // import UsersDB from '@/firebase/users-db'
@@ -29,26 +33,54 @@ export default {
     // commit('setCurrentUser', undefined)
     // commit('timesheets/setTimesheets', null, { root: true })
     // commit('callrecords/setCallrecords', null, { root: true })
-    //console.log(credentials)
-
     return new Promise(async resolve => {
-      // var data = await ipcRenderer.invoke('get-machine-id')
-      var data = await registerPushy()
-      //console.log(credentials)
-      console.log(';')
-
-      let user = await parseApi.loginUser(credentials.name, credentials.password, data)
-      console.log(user)
-
+    console.log(credentials)
+     var user = await  Parse.User.logIn(credentials.name, credentials.password)
+     console.log(user)
+    var device =  await  dispatch('devices/getCurrentDevice',null, { root: true })
+    console.log(device)
+  
       if (user == 404) {
         resolve(404)
       } else {
+        if(device == undefined){
+        resolve(404)
+
+        }
+        // if(parseApi == undefined){
+          const parseApi = new ParseApi(store, device)
+  global.parseApi = parseApi
+  console.log('r', router)
         commit('setCurrentUser', user)
         await parseApi.hydrateAll(user)
-        router.push('/dashboard')
+        resolve(user)
+
+      // }
+      console.log('r', router)
+      commit('setCurrentUser', user)
+      await parseApi.hydrateAll(user)
+      resolve(user)
       }
     })
-  },
+    },
+    // return new Promise(async resolve => {
+    //   // var data = await ipcRenderer.invoke('get-machine-id')
+    //   var data = await registerPushy()
+    //   //console.log(credentials)
+    //   console.log(';')
+
+    //   let user = await parseApi.loginUser(credentials.name, credentials.password, data)
+    //   console.log(user)
+
+    //   if (user == 404) {
+    //     resolve(404)
+    //   } else {
+    //     commit('setCurrentUser', user)
+    //     await parseApi.hydrateAll(user)
+    //     router.push('/dashboard')
+    //   }
+    // })
+ 
 
   autoLogin: async ({ commit, dispatch }, user) => {
     // commit('setCurrentUser', undefined)
@@ -57,7 +89,7 @@ export default {
     if (!user) dispatch('logout', { root: true })
 
     commit('setCurrentUser', user)
-    await parseApi.hydrateAll(user)
+    // await .hydrateAll(user)
     return
     // const currentRouter = router.app.$route
   },

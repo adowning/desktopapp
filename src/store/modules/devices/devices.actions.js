@@ -1,5 +1,6 @@
 import { getDevicesByUser } from '@/api/parseApi'
 import { ipcRenderer } from 'electron'
+import {router} from '../../../router'
 import axios from 'axios'
 const os = require('os')
 let address
@@ -15,7 +16,7 @@ export default {
    * Fetch devices of current loggedin user
    */
   getCurrentDevice: async ({ commit, dispatch }) => {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve, reject) => {
       // var result = await ipcRenderer.invoke('get-machine-id')
       var result = await registerPushy()
       var query = new Parse.Query('Device')
@@ -25,9 +26,28 @@ export default {
         device = await query.first()
       } catch (e) {
         console.log(e)
+        reject(e)
+        // throw Err?or(e)
+    //  router.push('/login')
+
       }
       if (device == undefined) {
-        var deviceInfo = await dispatch('generateCurrentDevice', 'auto-configured', result)
+        var ip = require('ip')
+        //console.log(ip.address())
+        const computerName = os.hostname()
+        // var pushyId = await registerPushy()
+        var deviceInfo = {
+          // deviceId: data,
+className: 'Device',
+          label: 'auto-configured',
+          pushyId: result,
+          computerName: computerName,
+          ipAddressInternal: ip.address(),
+          // ipAddressPublic: ipAddress,
+        }
+        // resolve(deviceInfo)
+        // var deviceInfo = await dispatch('generateCurrentDevice', 'auto-configured', result)
+
         var Device = Parse.Object.extend('Device')
         var device = new Parse.Object(deviceInfo)
         await device.save()
@@ -49,27 +69,27 @@ export default {
       })
     })
   },
-  generateCurrentDevice: async ({ commit, rootState }, label, data) => {
-    return new Promise(async resolve => {
-      // var data = await ipcRenderer.invoke('get-machine-id')
-      // var ipAddress = await axios.get('https://ipinfo.io')
-      var ip = require('ip')
-      //console.log(ip.address())
-      const computerName = os.hostname()
-      var pushyId = await registerPushy()
-      var deviceInfo = {
-        // deviceId: data,
-        label: label,
-        pushyId: pushyId,
-        computerName: computerName,
-        ipAddressInternal: ip.address(),
-        // ipAddressPublic: ipAddress,
-      }
-      resolve(deviceInfo)
-      // router.push('/dashboard')
-    })
-    // ipcRenderer.send('get-machine-id')
-  },
+  // generateCurrentDevice: async ({ commit, rootState }, label, data) => {
+  //   return new Promise(async resolve => {
+  //     // var data = await ipcRenderer.invoke('get-machine-id')
+  //     // var ipAddress = await axios.get('https://ipinfo.io')
+  //     var ip = require('ip')
+  //     //console.log(ip.address())
+  //     const computerName = os.hostname()
+  //     var pushyId = await registerPushy()
+  //     var deviceInfo = {
+  //       // deviceId: data,
+  //       label: label,
+  //       pushyId: pushyId,
+  //       computerName: computerName,
+  //       ipAddressInternal: ip.address(),
+  //       // ipAddressPublic: ipAddress,
+  //     }
+  //     resolve(deviceInfo)
+  //     // router.push('/dashboard')
+  //   })
+  //   // ipcRenderer.send('get-machine-id')
+  // },
   /**
    * Create a device for current loggedin user
    */

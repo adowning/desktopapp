@@ -294,6 +294,7 @@ export default {
 }
 </script>
 <style lang="scss">
+
 .stuck {
   position: absolute;
   bottom: 0px;

@@ -1,6 +1,11 @@
 <template>
   <v-sheet class="  py-0" width="1060">
     <v-switch v-model="clocked" label="Clocked in" class="ma-0 pa-0 ml-12"></v-switch>
+    <ul>
+      <li v-for="fruit in fruits" :key="fruit.id">
+        <slot :fruit="fruit" :slice="slice" />
+      </li>
+    </ul>
     <v-row height="28"><v-card></v-card></v-row>
     <v-slide-group v-model="model" class="ma-0 pa-0 pa-0 " multiple show-arrows>
       <v-slide-item
@@ -59,6 +64,12 @@ import EmployeeCard from '@/components/dashboard/EmployeeCard'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
+  props: {
+    fruits: {
+      type: Array,
+      required: true,
+    },
+  },
   components: {
     EmployeeCard,
   },
@@ -73,6 +84,9 @@ export default {
     ...mapState('profiles', ['profiles']),
   },
   methods: {
+    slice(z) {
+      console.log('x ', z)
+    },
     sendMessage(msg) {
       console.log('click', this.messageNew)
     },

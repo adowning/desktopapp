@@ -84,16 +84,16 @@
 </template>
 
 <script>
-import algoliasearch from 'algoliasearch/lite'
-import 'instantsearch.css/themes/algolia-min.css'
-import AccountList from '@/components/AccountList.vue'
+// import algoliasearch from 'algoliasearch/lite'
+// import 'instantsearch.css/themes/algolia-min.css'
+// import AccountList from '@/components/AccountList.vue'
 
 import AppInfiniteHits from '@/components/InfiniteHits.vue'
 export default {
     components: {
     // Chip,
     AccountList,
-    AppInfiniteHits
+    // AppInfiniteHits
   },
   data() {
     return {

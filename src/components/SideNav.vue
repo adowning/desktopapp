@@ -3,13 +3,15 @@
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="mini"
-      clipped
+      
       app
       permanent
       absolute
       height="100%"
       style="overflow-y: hidden !important;"
     >
+          <network-status />
+
       <v-list dense>
         <template v-for="route in routes">
           <v-menu
@@ -83,11 +85,11 @@ border-radius: 0px;"
 -webkit-border-radius: 0px;
 border-radius: 0px;"
           tile
-          nudge-right="58"
+          nudge-right="50"
           class="stuck"
           nudge-top="0"
           dense
-          close-delay="259"
+          close-delay="100"
           transition="slide-y-reverse-transition"
         >
           <template v-slot:activator="{ on }">
@@ -147,9 +149,10 @@ border-radius: 0px;"
 </template>
 
 <script>
-// import firebase from 'firebase/app'
+import NetworkStatus from './NetworkStatus'
 export default {
   name: 'SideNav',
+  components: { NetworkStatus },
 
   data: () => ({
     dialog: false,
@@ -167,7 +170,9 @@ export default {
         webview: false,
         link: '/dashboard',
         icon: 'mdi-view-dashboard-outline',
-        links: [],
+         links: [
+        
+        ],
       },
 
       {
@@ -183,18 +188,21 @@ export default {
           },
           {
             webview: false,
-            link: '/timesheetsmanage',
+            link: '/timesheetManage',
             text: 'Manage',
             icon: 'mdi-format-list-bulleted',
           },
         ],
       },
+      
       {
-        icon: 'mdi-account-multiple-outline',
+         link: '/employees',
+        webview: false,
+              icon: 'mdi-account-multiple-outline',
         links: [
           {
             webview: false,
-            link: '/accountpanel',
+            link: '/employees',
             text: 'Accounts',
             icon: 'mdi-account-group-outline',
           },
@@ -278,7 +286,7 @@ export default {
       parseApi.logoutUser()
     },
     handleWebviewPages(webview, page) {
-      //console.log(webview, page)
+      console.log(webview, page)
       if (page == '/home') {
         return this.logout()
       }
@@ -289,7 +297,8 @@ export default {
           this.$router.push({ name: 'webdev', params: { wp: 'browser/_User' } })
         }
       } else {
-        this.$router.push(page)
+        console.log(page)
+        this.$router.push({path: page})
       }
     },
   },

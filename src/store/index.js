@@ -16,23 +16,46 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: false,
+    darkMode: false,
+    userList: []
   },
   getters: {
-    isLoading: state => {
+    loading: state => {
       return state.loading
     },
+    darkMode: state => {
+      return state.loading
+    },
+
   },
   mutations: {
     saveLoading(state, loading) {
       state.loading = loading
     },
+    saveDarkMode(state, mode) {
+      state.darkMode = mode
+    },
+    saveUserList(state, list) {
+      state.saveUserList = list
+    },
   },
   actions: {
+   async setUserlist(context, payload){
+      const query = new Parse.Query(Parse.User);
+      const userList =  await query.find();
+      context.commit('saveUserList', userList)
+    },
     setLoading(context, payload) {
       context.commit('saveLoading', payload)
     },
+    setDarkMode(context, mode) {
+      context.commit('saveDarkMode', mode)
+    },
     reset(context) {
-      context.state = {}
+      context.state = {
+        loading: false,
+        darkMode: false
+      }
     },
   },
   modules: {

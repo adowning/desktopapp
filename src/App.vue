@@ -1,98 +1,39 @@
 <template>
-  <v-app id="app">
-    <div class="main-wrapper">
-      <nav-bar></nav-bar>
-      <snack-bar />
-      <side-nav v-if="user"></side-nav>
-      <transition name="fade" mode="out-in">
-        <v-container class="fill-height heigh ma-0 pa-0 ml-12" fluid>
-          <router-view></router-view>
-        </v-container>
-      </transition>
-      <dev-footer />
-    </div>
-  </v-app>
+  <div id="app">
+    <nav-bar />
+    <v-app id="inspire" :dark="darkMode">
+     <component :is="layout">
+    <router-view :layout.sync="layout"/>
+  </component>
+    </v-app>
+  </div>
 </template>
 <script>
-import NavBar from '@/components/NavBar'
-import SideNav from '@/components/SideNav'
-import SnackBar from '@/components/SnackBar.vue'
-import DevFooter from '@/components/DevFooter.vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
-
+import NavBar from './components/NavBar'
 export default {
   name: 'app',
-  components: {
-    SnackBar,
-    NavBar,
-    SideNav,
-    DevFooter,
+  components: { NavBar },
+  computed: {
+    ...mapState(['darkMode']),
   },
-  data: () => ({
-    // drawer: null,
-    // snackbar: {
-    //   show: false,
-    //   color: '',
-    //   mode: '',
-    //   timeout: 4000,
-    //   text: '',
-    //   top: true,
-    //   right: true,
-    //   icon: null,
-    // },
-  }),
-
-  async created() {
-    this.$vuetify.theme.dark = this.darkTheme
+  data() {
+    return {
+      layout: `div`,
+      currentSession: null,
+    }
   },
-  async mounted() {
-    var _user = await parseApi.currentUser()
-    if (_user != null) {
-      // parseApi.hydrateAll(user)
-      var user = _user.toJSON()
-      await this.$store.dispatch('authentication/autoLogin', user)
-      this.$router.push('/dashboard')
-    } else {
-      parseApi.logoutUser()
-      this.$router.push('/login')
-    }
-    const params = {
-      direction: 'incoming',
-      employeeName: 'mark',
-      date: '2019-12-17T18:32:45',
-      phoneNumber: '19035661416',
-    }
-    this.$electron.ipcRenderer.on('message-from-worker', (event, data) => {
-      //console.log('command hit')
-      if (typeof data.command === 'undefined') {
-        console.error('IPC message is missing command string')
-        return
-      }
-      if (data.command == 'test') {
-        if (data.payload.type == 'happy') {
-          this.onLaugh()
-          return
-        }
-        if (data.payload.type == 'test2') {
-          this.onAngry()
-          return
-        }
-      }
-    })
+  created() {
+    //  try{
+    //  this.currentSession  = await Parse.Session.current()
+    //  }catch(e){
+    //   handleParseError(e)
+    //  }
   },
   watch: {
     onDarkThemeChanged(value) {
       this.$vuetify.theme.dark = value
     },
-    user(val) {
-      // //console.log(val)
-      // this.$router.push('dashboard')
-    },
-  },
-  computed: {
-    ...mapGetters('app', ['newContentAvailable']),
-    ...mapState('app', ['refreshingApp']),
-    ...mapState('authentication', ['user']),
   },
 }
 </script>
@@ -129,5 +70,72 @@ html {
   // background-size: 100% 100%;
   max-height: 680px !important;
   max-width: 1200px !important;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.rotate {
+  animation: rotation 8s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+/* Glow for dropdown/card-hover*/
+.dark-mode .v-menu__content,
+.dark-mode .v-card--hover:hover {
+  box-shadow: 0 5px 20px rgba(142, 255, 252, 0.74);
+}
+
+.dark-mode .logo {
+  filter: brightness(0);
+}
+.v-list--two-line .v-list-item,
+.v-list-item--two-line {
+  min-height: 44px;
+}
+.v-form {
+  margin-left: 4px;
+}
+.v-list--two-line .v-list-item,
+.v-list-item--two-line {
+  max-height: 34px;
+}
+.avatar {
+  width: 160px;
+  border-radius: 6px;
+  display: block;
+  margin: 20px auto;
+}
+.card-img-overlay {
+  display: none;
+  transition: all 0.5s;
+}
+.card-img-overlay button {
+  margin-top: 20vh;
+}
+.card:hover .card-img-overlay {
+  display: block;
+}
+
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.5;
+  position: absolute;
+  width: 100%;
 }
 </style>

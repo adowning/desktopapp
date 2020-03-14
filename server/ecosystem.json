@@ -1,0 +1,62 @@
+{
+  "apps": [
+    {
+      "name": "API",
+      "script": "start",
+      "env_dev": {
+        "NODE_ENV": "development",
+        "GOOGLE_MAPS_JS_SAMPLES_KEY": "AIzaSyDledkfRPKVQchOfwzE9pSMK5yypjRh3bs",
+        "NUXT_ENV__APP_ID": "AndrewsApp",
+        "APP_ID": "AndrewsApp",
+        "MASTER_KEY": "Asdfasdf1234",
+        "DATABASE_URI": "mongodb+srv://ash:Asdfasdf1234@cluster0-ypimu.gcp.mongodb.net",
+        "DASHBOARD_USERNAME": "admin",
+        "DASHBOARD_PASSWORD": "asdfasdf",
+        "PORT": 1337,
+        "S3_ACCESS_KEY": "admin",
+        "S3_SECRET_KEY": "asdfasdf",
+        "S3_BUCKET": "public",
+        "S3_ENDPOINT": "https://s3.ashdevtools.com:9001",
+        "REDIS_URL": "redis://redis:6379",
+        "PUBNUB_SUB": "pub-sub-c-f8d59532-7e01-11e8-9fa1-423cba266524",
+        "PUBNUB_PUB": "pub-c-60f6b0bc-29ce-4b3c-9478-aab1cf7e3815",
+        "PUBNUB_SECRET": "sec-c-ODlhOTQ5ODEtNzJhNi00MzkwLWJkNTktNTkyMGI1YjI3NzI3",
+        "HOST_URL": "127.0.0.1",
+        "PROJECT_ID": "asdf123-1537543048053",
+        "GH_TOKEN": "671983a4a9c8d7e450c98bc552a06c700b172fe2"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "GOOGLE_MAPS_JS_SAMPLES_KEY": "AIzaSyDledkfRPKVQchOfwzE9pSMK5yypjRh3bs",
+        "NUXT_ENV__APP_ID": "AndrewsApp",
+        "APP_ID": "AndrewsApp",
+        "MASTER_KEY": "Asdfasdf1234",
+        "DATABASE_URI": "mongodb+srv://ash:Asdfasdf1234@cluster0-ypimu.gcp.mongodb.net",
+        "DASHBOARD_USERNAME": "admin",
+        "DASHBOARD_PASSWORD": "asdfasdf",
+        "PORT": 1337,
+        "S3_ACCESS_KEY": "admin",
+        "S3_SECRET_KEY": "asdfasdf",
+        "S3_BUCKET": "public",
+        "S3_ENDPOINT": "https://s3.ashdevtools.com:9001",
+        "REDIS_URL": "redis://redis:6379",
+        "PUBNUB_SUB": "pub-sub-c-f8d59532-7e01-11e8-9fa1-423cba266524",
+        "PUBNUB_PUB": "pub-c-60f6b0bc-29ce-4b3c-9478-aab1cf7e3815",
+        "PUBNUB_SECRET": "sec-c-ODlhOTQ5ODEtNzJhNi00MzkwLWJkNTktNTkyMGI1YjI3NzI3",
+        "HOST_URL": "127.0.0.1",
+        "PROJECT_ID": "asdf123-1537543048053",
+        "GH_TOKEN": "671983a4a9c8d7e450c98bc552a06c700b172fe2"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+      "user": "ash",
+      "host": ["75.109.198.60"],
+      "ref": "origin/master",
+      "repo": "git@github.com:adowning/andrews-server.git",
+      "path": "/srv/server/andrews-server",
+      "post-deploy": "npm install; npm build;"
+    }
+  }
+}

@@ -98,7 +98,10 @@
   </div>
 </template>
 <script>
+import LayoutDefault from '../layouts/LayoutDefault.vue'
+
 export default {
+
   data() {
     return {
       selectedProcess: '',
@@ -109,6 +112,9 @@ export default {
       processData: '',
       windowData: '',
     }
+  },
+    created() {
+    this.$emit(`update:layout`, LayoutDefault)
   },
 }
 </script>

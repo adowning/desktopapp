@@ -5,9 +5,9 @@ import store from '@/store/'
 let cam
 let isRunning = true
 let isReady = false
-Parse.initialize('AndrewsApp', process.env.VUE_APP_PARSE_MASTERKEY, process.env.VUE_APP_PARSE_MASTERKEY)
-Parse.serverURL = process.env.VUE_APP_PARSE_SERVER_URL
-Parse.liveQueryServerURL = process.env.VUE_APP_PARSE_SERVER_LIVE_QUERY_URL
+// Parse.initialize('AndrewsApp', process.env.VUE_APP_PARSE_MASTERKEY, process.env.VUE_APP_PARSE_MASTERKEY)
+// Parse.serverURL = process.env.VUE_APP_PARSE_SERVER_URL
+// Parse.liveQueryServerURL = process.env.VUE_APP_PARSE_SERVER_LIVE_QUERY_URL
 
 import { PythonShell } from 'python-shell'
 

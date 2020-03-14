@@ -72,9 +72,9 @@
 import { ipcRenderer } from 'electron'
 import AppInfiniteHits from '@/components/InfiniteHits'
 // import CustomerDetail from '@/components/accounts/CustomerDetail'
-import algoliasearch from 'algoliasearch/lite'
+// import algoliasearch from 'algoliasearch/lite'.
 
-import 'instantsearch.css/themes/algolia-min.css'
+// import 'instantsearch.css/themes/algolia-min.css'
 
 export default {
   components: {
@@ -85,7 +85,7 @@ export default {
     return {
       model: 1,
       dialog: false,
-      searchClient: algoliasearch('59EXPAJLR4', '2ed6f5748d1b4256ec19f9616b067b0d'),
+      // searchClient: algoliasearch('59EXPAJLR4', '2ed6f5748d1b4256ec19f9616b067b0d'),
     }
   },
   methods: {

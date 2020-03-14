@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { createWidgetMixin } from 'vue-instantsearch'
-import { connectInfiniteHits } from 'instantsearch.js/es/connectors'
+// import { createWidgetMixin } from 'vue-instantsearch'
+// import { connectInfiniteHits } from 'instantsearch.js/es/connectors'
 
 export default {
   name: 'InfiniteHits',

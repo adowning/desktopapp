@@ -119,10 +119,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('profiles', ['userProfile']),
-    ...mapState('timesheets', ['timesheets']),
+    ...mapState('User', ['user']),
+    ...mapState('Timesheet', ['getTimesheets']),
     ...mapState('callrecords', ['callrecords']),
-
+    // timesheets() {
+    //   return this.$store.getters[MODULES.Timesheet.getters.getTimesheets]
+    // },
     // user() {
     //   return Parse.User.current().toJSON()
     // },

@@ -1,11 +1,27 @@
 <template>
-  <v-container id="dashboard" class="mt-6 ma-0 pa=0 ml-10 mr-0">
-    <online-now />
-  </v-container>
-  <!-- </div> -->
+  <!-- <layout name="LayoutDefault"> -->
+  <!-- <layout-default-dynamic> -->
+  <div class="Dashboard">
+    <v-container id="dashboard" class="mt-6 ma-0 pa=0 ml-10 mr-0">
+      <online-now :fruits="fruitsOfTheNinja">
+        <template #default="{ fruit, slice }">
+          {{ fruit.name }}
+
+          <button @click="slice(fruit.id)">
+            ⚔️ Style Slicing
+          </button>
+        </template>
+      </online-now>
+    </v-container>
+  </div>
+  <!-- </layout-default-dynamic> -->
 </template>
 
 <script>
+// import Layout from '../layouts/Layout'
+// import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic';
+import LayoutDefault from '../layouts/LayoutDefault.vue'
+
 import moment from 'moment'
 import OnlineNow from '@/components/dashboard/OnlineNow'
 import { mapState, mapActions, mapGetters } from 'vuex'
@@ -14,13 +30,43 @@ import { generateUserStats } from '../util/helpers'
 import Parse from 'parse'
 export default {
   name: 'Dashboard',
+
   components: {
     OnlineNow,
+    // LayoutDefaultDynamic,
   },
   data: function() {
-    return {}
+    return {
+      fruitsOfTheNinja: [
+        {
+          id: 1,
+          name: '🍋Lemon',
+        },
+        {
+          id: 2,
+          name: '🥝Kiwi',
+        },
+        {
+          id: 3,
+          name: '🍑Peach',
+        },
+        {
+          id: 4,
+          name: '🍌Banana',
+        },
+        {
+          id: 5,
+          name: '🍎Apple',
+        },
+      ],
+    }
   },
 
+  created() {
+    // this.$emit(`update:layout`, LayoutDefault)
+    // this.$emit('update:layout', LayoutDefault);
+    this.$emit('update:layout', LayoutDefault)
+  },
   computed: {
     // ...mapGetters('timesheets', ['getTimesheetsByUserId']),
     ...mapState('profiles', ['profiles']),
@@ -139,6 +185,9 @@ export default {
     // },
   },
   methods: {
+    slice(id) {
+      // ... handles the fruit slicing Ninja style!
+    },
     addMissedCall: function() {
       // var arr = this.series.slice()
       this.series[0]++

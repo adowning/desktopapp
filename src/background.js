@@ -1,7 +1,6 @@
 'use strict'
 import { machineId, machineIdSync } from 'node-machine-id'
 const { autoUpdater } = require('electron-updater')
-const log = require('electron-log')
 // const fetch = require('node-fetch')
 import fetch from 'node-fetch'
 import { app, protocol, Notification, BrowserWindow, BrowserView, ipcMain } from 'electron'
@@ -10,7 +9,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
 const isDebug = process.argv.includes('--debug')
-import Parse from 'parse/node'
+// import Parse from 'parse/node'
 let currentUser
 let _machineId
 let win
@@ -23,24 +22,24 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 //   .then(res => res.json())
 //   .then(json => console.log(json))
 
-Parse.initialize(
-  process.env.VUE_APP_PARSE_SERVER_APPLICATION_ID,
-  undefined,
-  process.env.VUE_APP_PARSE_SERVER_JAVASCRIPT_KEY,
-)
-Parse.serverURL = process.env.VUE_APP_PARSE_SERVER_URL
-Parse.liveQueryServerURL = process.env.VUE_APP_PARSE_SERVER_LIVE_QUERY_URL
-Parse.enableLocalDatastore()
-Parse.User.enableUnsafeCurrentUser()
-console.log(process.env.VUE_APP_PARSE_SERVER_URL)
-console.log(Parse.User.current())
-;(async function() {
-  // targetWindow.webContents.send(message, payload)
-})()
+// Parse.initialize(
+//   process.env.VUE_APP_PARSE_SERVER_APPLICATION_ID,
+//   undefined,
+//   process.env.VUE_APP_PARSE_SERVER_JAVASCRIPT_KEY,
+// )
+// Parse.serverURL = process.env.VUE_APP_PARSE_SERVER_URL
+// Parse.liveQueryServerURL = process.env.VUE_APP_PARSE_SERVER_LIVE_QUERY_URL
+// Parse.enableLocalDatastore()
+// Parse.User.enableUnsafeCurrentUser()
+// console.log(process.env.VUE_APP_PARSE_SERVER_URL)
+// console.log(Parse.User.current())
+// ;(async function() {
+//   // targetWindow.webContents.send(message, payload)
+// })()
 
-autoUpdater.logger = log
-autoUpdater.logger.transports.file.level = 'info'
-log.info('App starting...')
+// autoUpdater.logger = log
+// autoUpdater.logger.transports.file.level = 'info'
+// log.info('App starting...')
 
 async function getMachineId() {
   _machineId = await machineId()
@@ -49,7 +48,7 @@ async function getMachineId() {
 }
 
 function sendStatusToWindow(text) {
-  log.info(text)
+  // log.info(text)
   win.webContents.send('message', text)
 }
 autoUpdater.on('checking-for-update', () => {
@@ -65,8 +64,8 @@ autoUpdater.on('error', err => {
   sendStatusToWindow('Error in auto-updater. ' + err)
 })
 autoUpdater.on('download-progress', progressObj => {
-  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  //   let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+  //   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
   log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
   sendStatusToWindow(log_message)
 })
@@ -133,7 +132,7 @@ function createMapWindow(devPath, prodPath) {
   })
 }
 
-async function createWindow(devPath, prodPath) {
+async function createWindow() {
   // create the game UI window
   win = new BrowserWindow({
     width: 2400,
@@ -162,14 +161,14 @@ async function createWindow(devPath, prodPath) {
     // view.webContents.loadURL(`app://./${prodPath}`)
   }
   await getMachineId()
-  await Parse.User.logIn('asdf', 'asdf')
+  // await Parse.User.logIn('asdf', 'asdf')
   console.log(_machineId)
-  var query = new Parse.Query('Device')
-  query.equalTo('deviceId', _machineId)
-  var device = await query.first()
-  console.log(device)
-  console.log(Parse.User.current().toJSON())
-  currentUser = Parse.User.current().toJSON()
+  // var query = new Parse.Query('Device')
+  // query.equalTo('deviceId', _machineId)
+  // var device = await query.first()
+  // console.log(device)
+  // console.log(Parse.User.current().toJSON())
+  // currentUser = Parse.User.current().toJSON()
 
   sendWindowMessage(win, 'set-user', currentUser)
   win.on('closed', () => {
@@ -224,12 +223,18 @@ app.on('activate', () => {
 
 app.on('ready', async () => {
   // create the main application window
-  createWindow('notes', 'notes.html')
+  ipcMain.on('online-status-changed', (event, status) => {
+    console.log(status)
+  })
+  createWindow()
 
   // create the background worker window
   // createNotes('notes', 'notes.html')
   // createMapWindow('maps', 'maps.html')
+  if(!isDev){
   autoUpdater.checkForUpdatesAndNotify()
+  }
+
   ipcMain.on('notification', (event, arg) => {
     //console.log('got msg')
     var notification = new Notification({ title: 'asdf', body: arg.message })

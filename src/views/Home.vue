@@ -51,7 +51,7 @@ export default {
     top: 50%;
     margin-left: -15vw;
     margin-top: -15vh;
-    animation: image 2s ease-in-out 6s 1 normal forwards;
+    animation: image 2s ease-in-out 3s 1 normal forwards;
     background: url('../assets/logo.svg');
     background-repeat: no-repeat;
     box-sizing: border-box;
@@ -78,7 +78,7 @@ export default {
         height: 3vh;
       }
     }
-    @for $n from (27) * -1 through -1 {
+    @for $n from (15) * -1 through -1 {
       span:nth-child(#{abs($n)}) {
         animation-delay: $n * 0.1s + 3s, abs($n) * 0.1s + 3s;
       }
