@@ -43,8 +43,8 @@
     "node-ts": "^5.0.4",
     "parse": "^2.11.0",
     "parse-dashboard": "^2.0.5",
-    "parse-server": "4.0.2",
-    "pubnub": "^4.27.3",
+    "parse-server": "5.2.7",
+    "pubnub": "^4.37.0",
     "stack-utils": "^2.0.1",
     "typescript": "^3.8.3"
   },
