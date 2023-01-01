@@ -33,7 +33,7 @@
     "prettier": "^1.19.1",
     "sucrase": "^3.12.1",
     "ts-jest": "^24.3.0",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.10.1"
   },
   "dependencies": {
     "axios": "^0.19.2",
